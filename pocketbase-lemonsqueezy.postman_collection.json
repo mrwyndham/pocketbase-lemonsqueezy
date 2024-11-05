@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "7cc5214f-45bc-4643-8684-1d2185102b09",
+		"name": "pocketbase-lemonsqueezy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8891137"
+	},
+	"item": [
+		{
+			"name": "https://lemonsqueezy.pockethost.io/create-portal-link",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MzE5NzI1NzIsImlkIjoiMmduNDN6bms5czZwdnVsIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.8Pzc2BIhOLU8GujR1pu4dISccEVLD_CsvilvJbyo55I",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://lemonsqueezy.pockethost.io/create-portal-link",
+					"protocol": "https",
+					"host": [
+						"lemonsqueezy",
+						"pockethost",
+						"io"
+					],
+					"path": [
+						"create-portal-link"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://lemonsqueezy.pockethost.io/create-checkout-session",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MzEzMTQyMjgsImlkIjoiMmduNDN6bms5czZwdnVsIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.DcQvhUVDjt_5KuZpVKvkPF_6KU6j9YxSvjzCFk9pGXU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"variant_id\": \"571557\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://lemonsqueezy.pockethost.io/create-checkout-session",
+					"protocol": "https",
+					"host": [
+						"lemonsqueezy",
+						"pockethost",
+						"io"
+					],
+					"path": [
+						"create-checkout-session"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
