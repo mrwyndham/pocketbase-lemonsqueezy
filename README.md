@@ -85,3 +85,7 @@ The cron job automatically:
 - Syncs product and variant data
 - Maintains data consistency between LemonSqueezy and PocketBase
 
+### Postman Collection
+
+To facilitate testing and integration, a Postman collection is included in the project. You can find it at `./pocketbase-lemonsqueezy.postman_collection.json`. This collection contains pre-configured requests for all available endpoints, allowing you to quickly test the API functionality and understand the request/response flow.
+
