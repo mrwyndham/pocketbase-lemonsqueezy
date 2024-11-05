@@ -13,7 +13,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MzE5NzI1NzIsImlkIjoiMmduNDN6bms5czZwdnVsIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.8Pzc2BIhOLU8GujR1pu4dISccEVLD_CsvilvJbyo55I",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MzIwMDU1MTAsImlkIjoiYzk5emNhb2FicWF6a3ExIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.5eNzZmqXLHllGjDMaodG6PS7E4Dc6IAt4RwXHzHiDf0",
 						"type": "text"
 					}
 				],
@@ -39,13 +39,13 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MzEzMTQyMjgsImlkIjoiMmduNDN6bms5czZwdnVsIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.DcQvhUVDjt_5KuZpVKvkPF_6KU6j9YxSvjzCFk9pGXU",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJfcGJfdXNlcnNfYXV0aF8iLCJleHAiOjE3MzIwMDU1MTAsImlkIjoiYzk5emNhb2FicWF6a3ExIiwidHlwZSI6ImF1dGhSZWNvcmQifQ.5eNzZmqXLHllGjDMaodG6PS7E4Dc6IAt4RwXHzHiDf0",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"variant_id\": \"571557\"\n}",
+					"raw": "{\n    \"variant_id\": \"586224\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -62,6 +62,58 @@
 					],
 					"path": [
 						"create-checkout-session"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://lemonsqueezy.pockethost.io/manual-lemonsqueezy-synchronization",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://lemonsqueezy.pockethost.io/manual-lemonsqueezy-synchronization",
+					"protocol": "https",
+					"host": [
+						"lemonsqueezy",
+						"pockethost",
+						"io"
+					],
+					"path": [
+						"manual-lemonsqueezy-synchronization"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/collections/user/auth-with-password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"identity\": \"customer@biz365.com.au\",\n    \"password\": \"@Test12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://lemonsqueezy.pockethost.io/api/collections/user/auth-with-password",
+					"protocol": "https",
+					"host": [
+						"lemonsqueezy",
+						"pockethost",
+						"io"
+					],
+					"path": [
+						"api",
+						"collections",
+						"user",
+						"auth-with-password"
 					]
 				}
 			},

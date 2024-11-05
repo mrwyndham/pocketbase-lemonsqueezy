@@ -40,7 +40,7 @@
 
 
 routerAdd("POST", "/lemonsqueezy", (c) => {
-    const secret = "your_lemonsqueezy_signing_secret_here";
+    const secret = "hello_world";
 
     const info = $apis.requestInfo(c)
     const signature = info.headers["x_signature"] || '';
@@ -53,12 +53,12 @@ routerAdd("POST", "/lemonsqueezy", (c) => {
         throw new BadRequestError(`Invalid webhook signature.`);
     }
     const data = info.data;
-    $app.logger().info("Received data:", "lemonsqueezy", data.meta.event_name);
+    $app.logger().info("Received data:", "lemonsqueezy", data.meta.event_name, "json", data);
 
     switch (data.meta.event_name) {
         case "subscription_created":
         case "subscription_cancelled":
-        case "subscription_payment_success":
+        case "subscription_updated":
             try {
                 const subscription = data.data;
                 const existingSubscriptions = $app.dao().findRecordsByFilter(
@@ -106,7 +106,7 @@ routerAdd("POST", "/lemonsqueezy", (c) => {
 
 
 routerAdd("POST", "/create-checkout-session", async (c) => {
-    const apiKey = "your_api_key_here";
+    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG";
     const info = $apis.requestInfo(c);
     const token = info.headers["authorization"] || '';
     let userRecord;
@@ -222,8 +222,8 @@ routerAdd("POST", "/create-checkout-session", async (c) => {
     }
 })
 
-routerAdd("POST", "/create-portal-link", async (c) => {
-    const apiKey = "your_api_key_here"; // Provided API key
+routerAdd("GET", "/create-portal-link", async (c) => {
+    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG"; // Provided API key
     const info = $apis.requestInfo(c);
     const token = info.headers["authorization"] || '';
     let userRecord;
@@ -249,6 +249,7 @@ routerAdd("POST", "/create-portal-link", async (c) => {
         });
 
         const responseData = response.json;
+        return c.json(404, { "responseData": responseData });
         const customerPortalLink = responseData.data.attributes.urls.customer_portal;
 
         return c.json(response.status, { "customer_portal_link": customerPortalLink });
@@ -259,172 +260,172 @@ routerAdd("POST", "/create-portal-link", async (c) => {
 })
 
 // Sync LemonSqueezy data every 30 minutes
-cronAdd("*/30 * * * *", () => {
-    const apiKey = "your_api_key_here";
+// cronAdd("*/30 * * * *", () => {
+//     const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG";
 
-    try {
-        // Fetch subscriptions
-        const subscriptionsRes = $http.send({
-            url: "https://api.lemonsqueezy.com/v1/subscriptions",
-            method: "GET",
-            headers: {
-                "Accept": "application/vnd.api+json",
-                "Content-Type": "application/vnd.api+json",
-                "Authorization": `Bearer ${apiKey}`
-            },
-            timeout: 120
-        });
+//     try {
+//         // Fetch subscriptions
+//         const subscriptionsRes = $http.send({
+//             url: "https://api.lemonsqueezy.com/v1/subscriptions",
+//             method: "GET",
+//             headers: {
+//                 "Accept": "application/vnd.api+json",
+//                 "Content-Type": "application/vnd.api+json",
+//                 "Authorization": `Bearer ${apiKey}`
+//             },
+//             timeout: 120
+//         });
 
-        const subscriptionsData = subscriptionsRes.json;
+//         const subscriptionsData = subscriptionsRes.json;
 
-        subscriptionsData.data.forEach(subscription => {
-            try {
-                const existingSubscriptions = $app.dao().findRecordsByFilter(
-                    "subscription",
-                    `subscription_id = "${subscription.id}"`
-                );
+//         subscriptionsData.data.forEach(subscription => {
+//             try {
+//                 const existingSubscriptions = $app.dao().findRecordsByFilter(
+//                     "subscription",
+//                     `subscription_id = "${subscription.id}"`
+//                 );
 
-                const subscriptionData = {
-                    "subscription_id": subscription.id,
-                    "lemonsqueezy_customer_id": subscription.attributes?.customer_id || "",
-                    "status": subscription.attributes?.status || "",
-                    "variant_id": subscription.attributes?.variant_id || "",
-                    "quantity": subscription.attributes?.first_subscription_item?.quantity || 0,
-                    "metadata": JSON.stringify({}),
-                    "cancel_at_period_end": subscription.attributes?.cancelled || false,
-                    "current_period_start": subscription.attributes?.created_at || "",
-                    "current_period_end": subscription.attributes?.renews_at || "",
-                    "ended_at": subscription.attributes?.ends_at || "",
-                    "cancel_at": "",
-                    "canceled_at": "",
-                    "trial_start": "",
-                    "trial_end": subscription.attributes?.trial_ends_at || ""
-                };
+//                 const subscriptionData = {
+//                     "subscription_id": subscription.id,
+//                     "lemonsqueezy_customer_id": subscription.attributes?.customer_id || "",
+//                     "status": subscription.attributes?.status || "",
+//                     "variant_id": subscription.attributes?.variant_id || "",
+//                     "quantity": subscription.attributes?.first_subscription_item?.quantity || 0,
+//                     "metadata": JSON.stringify({}),
+//                     "cancel_at_period_end": subscription.attributes?.cancelled || false,
+//                     "current_period_start": subscription.attributes?.created_at || "",
+//                     "current_period_end": subscription.attributes?.renews_at || "",
+//                     "ended_at": subscription.attributes?.ends_at || "",
+//                     "cancel_at": "",
+//                     "canceled_at": "",
+//                     "trial_start": "",
+//                     "trial_end": subscription.attributes?.trial_ends_at || ""
+//                 };
 
-                if (existingSubscriptions.length > 0) {
-                    // Update existing record
-                    const record = existingSubscriptions[0];
-                    record.load(subscriptionData);
-                    $app.dao().saveRecord(record);
-                } else {
-                    // Create new record
-                    const collection = $app.dao().findCollectionByNameOrId("subscription");
-                    const record = new Record(collection);
-                    record.load(subscriptionData);
-                    $app.dao().saveRecord(record);
-                }
-            } catch (err) {
-                $app.logger().error("Error processing subscription:", err);
-                throw new BadRequestError("Failed to process subscription: " + err.message);
-            }
-        });
+//                 if (existingSubscriptions.length > 0) {
+//                     // Update existing record
+//                     const record = existingSubscriptions[0];
+//                     record.load(subscriptionData);
+//                     $app.dao().saveRecord(record);
+//                 } else {
+//                     // Create new record
+//                     const collection = $app.dao().findCollectionByNameOrId("subscription");
+//                     const record = new Record(collection);
+//                     record.load(subscriptionData);
+//                     $app.dao().saveRecord(record);
+//                 }
+//             } catch (err) {
+//                 $app.logger().error("Error processing subscription:", err);
+//                 throw new BadRequestError("Failed to process subscription: " + err.message);
+//             }
+//         });
 
-        const variantsRes = $http.send({
-            url: "https://api.lemonsqueezy.com/v1/variants",
-            method: "GET",
-            headers: {
-                "Accept": "application/vnd.api+json",
-                "Content-Type": "application/vnd.api+json",
-                "Authorization": `Bearer ${apiKey}`
-            },
-            timeout: 120
-        });
+//         const variantsRes = $http.send({
+//             url: "https://api.lemonsqueezy.com/v1/variants",
+//             method: "GET",
+//             headers: {
+//                 "Accept": "application/vnd.api+json",
+//                 "Content-Type": "application/vnd.api+json",
+//                 "Authorization": `Bearer ${apiKey}`
+//             },
+//             timeout: 120
+//         });
 
-        const variantsData = variantsRes.json;
+//         const variantsData = variantsRes.json;
 
-        // Process variants
-        variantsData.data.forEach(variant => {
-            try {
-                const existingVariants = $app.dao().findRecordsByFilter(
-                    "variant",
-                    `variant_id = "${variant.id}"`
-                );
+//         // Process variants
+//         variantsData.data.forEach(variant => {
+//             try {
+//                 const existingVariants = $app.dao().findRecordsByFilter(
+//                     "variant",
+//                     `variant_id = "${variant.id}"`
+//                 );
 
-                const variantData = {
-                    "variant_id": variant.id,
-                    "product_id": variant.attributes.product_id,
-                    "active": variant.attributes.status === "published",
-                    "description": variant.attributes.description,
-                    "currency": "USD", // Assuming USD, adjust as needed
-                    "unit_amount": variant.attributes.price,
-                    "type": variant.attributes.is_subscription ? "subscription" : "one-time",
-                    "interval": variant.attributes.interval,
-                    "interval_count": variant.attributes.interval_count,
-                    "trial_period_days": variant.attributes.has_free_trial ? variant.attributes.trial_interval_count : 0,
-                    "metadata": JSON.stringify({})
-                };
+//                 const variantData = {
+//                     "variant_id": variant.id,
+//                     "product_id": variant.attributes.product_id,
+//                     "active": variant.attributes.status === "published",
+//                     "description": variant.attributes.description,
+//                     "currency": "USD", // Assuming USD, adjust as needed
+//                     "unit_amount": variant.attributes.price,
+//                     "type": variant.attributes.is_subscription ? "subscription" : "one-time",
+//                     "interval": variant.attributes.interval,
+//                     "interval_count": variant.attributes.interval_count,
+//                     "trial_period_days": variant.attributes.has_free_trial ? variant.attributes.trial_interval_count : 0,
+//                     "metadata": JSON.stringify({})
+//                 };
 
-                if (existingVariants.length > 0) {
-                    const record = existingVariants[0];
-                    record.load(variantData);
-                    $app.dao().saveRecord(record);
-                } else {
-                    const collection = $app.dao().findCollectionByNameOrId("variant");
-                    const record = new Record(collection);
-                    record.load(variantData);
-                    $app.dao().saveRecord(record);
-                }
-            } catch (err) {
-                $app.logger().error("Error processing variant:", err);
-                throw new BadRequestError("Failed to process variant: " + err.message);
-            }
-        });
+//                 if (existingVariants.length > 0) {
+//                     const record = existingVariants[0];
+//                     record.load(variantData);
+//                     $app.dao().saveRecord(record);
+//                 } else {
+//                     const collection = $app.dao().findCollectionByNameOrId("variant");
+//                     const record = new Record(collection);
+//                     record.load(variantData);
+//                     $app.dao().saveRecord(record);
+//                 }
+//             } catch (err) {
+//                 $app.logger().error("Error processing variant:", err);
+//                 throw new BadRequestError("Failed to process variant: " + err.message);
+//             }
+//         });
 
-        const productsRes = $http.send({
-            url: "https://api.lemonsqueezy.com/v1/products",
-            method: "GET",
-            headers: {
-                "Accept": "application/vnd.api+json",
-                "Content-Type": "application/vnd.api+json",
-                "Authorization": `Bearer ${apiKey}`
-            },
-            timeout: 120
-        });
+//         const productsRes = $http.send({
+//             url: "https://api.lemonsqueezy.com/v1/products",
+//             method: "GET",
+//             headers: {
+//                 "Accept": "application/vnd.api+json",
+//                 "Content-Type": "application/vnd.api+json",
+//                 "Authorization": `Bearer ${apiKey}`
+//             },
+//             timeout: 120
+//         });
 
-        const productsData = productsRes.json;
+//         const productsData = productsRes.json;
 
-        productsData.data.forEach(product => {
-            try {
-                const existingProducts = $app.dao().findRecordsByFilter(
-                    "product",
-                    `product_id = "${product.id}"`
-                );
+//         productsData.data.forEach(product => {
+//             try {
+//                 const existingProducts = $app.dao().findRecordsByFilter(
+//                     "product",
+//                     `product_id = "${product.id}"`
+//                 );
 
-                const productData = {
-                    "product_id": product.id,
-                    "active": product.attributes.status === "published",
-                    "name": product.attributes.name,
-                    "description": product.attributes.description,
-                    "image": product.attributes.thumb_url,
-                    "metadata": JSON.stringify({})
-                };
+//                 const productData = {
+//                     "product_id": product.id,
+//                     "active": product.attributes.status === "published",
+//                     "name": product.attributes.name,
+//                     "description": product.attributes.description,
+//                     "image": product.attributes.thumb_url,
+//                     "metadata": JSON.stringify({})
+//                 };
 
-                if (existingProducts.length > 0) {
-                    const record = existingProducts[0];
-                    record.load(productData);
-                    $app.dao().saveRecord(record);
-                } else {
-                    const collection = $app.dao().findCollectionByNameOrId("product");
-                    const record = new Record(collection);
-                    record.load(productData);
-                    $app.dao().saveRecord(record);
-                }
-            } catch (err) {
-                $app.logger().error("Error processing product:", err);
-                throw new BadRequestError("Failed to process product: " + err.message);
-            }
-        });
+//                 if (existingProducts.length > 0) {
+//                     const record = existingProducts[0];
+//                     record.load(productData);
+//                     $app.dao().saveRecord(record);
+//                 } else {
+//                     const collection = $app.dao().findCollectionByNameOrId("product");
+//                     const record = new Record(collection);
+//                     record.load(productData);
+//                     $app.dao().saveRecord(record);
+//                 }
+//             } catch (err) {
+//                 $app.logger().error("Error processing product:", err);
+//                 throw new BadRequestError("Failed to process product: " + err.message);
+//             }
+//         });
 
-        $app.logger().info("Ran sync", "lemonsqueezy", "success");
-        return c.json(200, { "message": "success" });
-    } catch (error) {
-        $app.logger().error("Error during synchronization:", error);
-        return c.json(400, { "message": error });
-    }
-});
+//         $app.logger().info("Ran sync", "lemonsqueezy", "success");
+//         return c.json(200, { "message": "success" });
+//     } catch (error) {
+//         $app.logger().error("Error during synchronization:", error);
+//         return c.json(400, { "message": error });
+//     }
+// });
 
 routerAdd("GET","/manual-lemonsqueezy-synchronization", async (c) => {
-    const apiKey = "your_api_key_here";
+    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG";
 
     try {
         const subscriptionsRes = $http.send({
