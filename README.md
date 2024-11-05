@@ -47,9 +47,9 @@ For more details on setting up PocketBase hooks, refer to the [official PocketBa
    const apiKey = "your_api_key_here";
    ```
 
-3. Update your store ID where needed:
+3. Update your store ID in the `/create-checkout-session` endpoint:
    ```javascript
-   "id": "your_store_id"
+   "id": "your_store_id" // Update this in the store relationship object
    ```
 
 ## Available Endpoints
