@@ -106,7 +106,7 @@ routerAdd("POST", "/lemonsqueezy", (c) => {
 
 
 routerAdd("POST", "/create-checkout-session", async (c) => {
-    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG";
+    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI2ZmE4ZDRmMjc5YTg2YjkzOGZmZGI4NDI4ZWI4ZjY2YzE4NjQ5MzRjMzllMzQ2NTQ2MTE2MmQ0YTc0N2Q1NDE0ODE3N2M1MDZhYjcwMmIzZCIsImlhdCI6MTczMDg3NTcyNC4zMTcxMDIsIm5iZiI6MTczMDg3NTcyNC4zMTcxMDUsImV4cCI6MjA0NjQwODUyNC4yNzQ4ODQsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.BFgDM79CxYLG2HG7fSsfHrkNBQIxK_ntE1LmEsJmLhADb81UDKLjlrjvOJiySrFquiyTkt24x2sMJ9x5-FL36mivIPW4IWNHyi-E_-SGcWURErAAf5kiJJqZ5x-1xgHFtGBdHw3zZ6vVmSXcNymK5KioVBsP48Ht5oIL_753dczxDk50t1j8KneNjdhm2ZV5Qch_WGE2M1rPwMP4WnY0xs2zNgLml15JaGMf_bhjkikqaQca8-DuA_KS7DwP6WhUoCNwW_sDs8apjMW-4J3FpO-_XR36MwfaoCXa2dVR2tCBw7PkI6nxTAUwIp45Vj4vpbAhfVs5YgN2BePsA3imJmz7NH77OMXf1qm0ZszHT-Xf56VjGOzNWtLoM9QHwgrF1HQtdC1F5w4jhMRKPMwTCX8N4T9uyYtuH4S7z6CIWX-GxDUKcIcc1YusnjDZEAtppf7C1FWLhBUhGr9ONmaHh7I_xMtRLlIO5aTClDZjirwrR15Zl1QWnwAt69wnT4uf";
     const info = $apis.requestInfo(c);
     const token = info.headers["authorization"] || '';
     let userRecord;
@@ -179,8 +179,10 @@ routerAdd("POST", "/create-checkout-session", async (c) => {
                     "button_color": "#7047EB"
                 },
                 "checkout_data": {
+                    "name": userRecord.getString("displayName"),
+                    "email": userRecord.getString("email"),
                     "custom": {
-                        "user_id": userRecord.id
+                        "user_id": userRecord.id,
                     }
                 },
                 "preview": true
@@ -223,7 +225,7 @@ routerAdd("POST", "/create-checkout-session", async (c) => {
 })
 
 routerAdd("GET", "/create-portal-link", async (c) => {
-    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG"; // Provided API key
+    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI2ZmE4ZDRmMjc5YTg2YjkzOGZmZGI4NDI4ZWI4ZjY2YzE4NjQ5MzRjMzllMzQ2NTQ2MTE2MmQ0YTc0N2Q1NDE0ODE3N2M1MDZhYjcwMmIzZCIsImlhdCI6MTczMDg3NTcyNC4zMTcxMDIsIm5iZiI6MTczMDg3NTcyNC4zMTcxMDUsImV4cCI6MjA0NjQwODUyNC4yNzQ4ODQsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.BFgDM79CxYLG2HG7fSsfHrkNBQIxK_ntE1LmEsJmLhADb81UDKLjlrjvOJiySrFquiyTkt24x2sMJ9x5-FL36mivIPW4IWNHyi-E_-SGcWURErAAf5kiJJqZ5x-1xgHFtGBdHw3zZ6vVmSXcNymK5KioVBsP48Ht5oIL_753dczxDk50t1j8KneNjdhm2ZV5Qch_WGE2M1rPwMP4WnY0xs2zNgLml15JaGMf_bhjkikqaQca8-DuA_KS7DwP6WhUoCNwW_sDs8apjMW-4J3FpO-_XR36MwfaoCXa2dVR2tCBw7PkI6nxTAUwIp45Vj4vpbAhfVs5YgN2BePsA3imJmz7NH77OMXf1qm0ZszHT-Xf56VjGOzNWtLoM9QHwgrF1HQtdC1F5w4jhMRKPMwTCX8N4T9uyYtuH4S7z6CIWX-GxDUKcIcc1YusnjDZEAtppf7C1FWLhBUhGr9ONmaHh7I_xMtRLlIO5aTClDZjirwrR15Zl1QWnwAt69wnT4uf"; // Provided API key
     const info = $apis.requestInfo(c);
     const token = info.headers["authorization"] || '';
     let userRecord;
@@ -249,7 +251,6 @@ routerAdd("GET", "/create-portal-link", async (c) => {
         });
 
         const responseData = response.json;
-        return c.json(404, { "responseData": responseData });
         const customerPortalLink = responseData.data.attributes.urls.customer_portal;
 
         return c.json(response.status, { "customer_portal_link": customerPortalLink });
@@ -261,7 +262,7 @@ routerAdd("GET", "/create-portal-link", async (c) => {
 
 // Sync LemonSqueezy data every 30 minutes
 // cronAdd("*/30 * * * *", () => {
-//     const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG";
+//     const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI2ZmE4ZDRmMjc5YTg2YjkzOGZmZGI4NDI4ZWI4ZjY2YzE4NjQ5MzRjMzllMzQ2NTQ2MTE2MmQ0YTc0N2Q1NDE0ODE3N2M1MDZhYjcwMmIzZCIsImlhdCI6MTczMDg3NTcyNC4zMTcxMDIsIm5iZiI6MTczMDg3NTcyNC4zMTcxMDUsImV4cCI6MjA0NjQwODUyNC4yNzQ4ODQsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.BFgDM79CxYLG2HG7fSsfHrkNBQIxK_ntE1LmEsJmLhADb81UDKLjlrjvOJiySrFquiyTkt24x2sMJ9x5-FL36mivIPW4IWNHyi-E_-SGcWURErAAf5kiJJqZ5x-1xgHFtGBdHw3zZ6vVmSXcNymK5KioVBsP48Ht5oIL_753dczxDk50t1j8KneNjdhm2ZV5Qch_WGE2M1rPwMP4WnY0xs2zNgLml15JaGMf_bhjkikqaQca8-DuA_KS7DwP6WhUoCNwW_sDs8apjMW-4J3FpO-_XR36MwfaoCXa2dVR2tCBw7PkI6nxTAUwIp45Vj4vpbAhfVs5YgN2BePsA3imJmz7NH77OMXf1qm0ZszHT-Xf56VjGOzNWtLoM9QHwgrF1HQtdC1F5w4jhMRKPMwTCX8N4T9uyYtuH4S7z6CIWX-GxDUKcIcc1YusnjDZEAtppf7C1FWLhBUhGr9ONmaHh7I_xMtRLlIO5aTClDZjirwrR15Zl1QWnwAt69wnT4uf";
 
 //     try {
 //         // Fetch subscriptions
@@ -425,7 +426,7 @@ routerAdd("GET", "/create-portal-link", async (c) => {
 // });
 
 routerAdd("GET","/manual-lemonsqueezy-synchronization", async (c) => {
-    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI1ZDM4Yjc3MTk5MTAyZTBlODgzYWYyMGY4Y2M3NDhmODUxZTVmODZmNDVlODRkMzFhY2FiODI3ODEzYjc5OTgyMTQyZmU3M2FlMzFlZGE0YyIsImlhdCI6MTczMDc5NTE2Ni42OTI4MjQsIm5iZiI6MTczMDc5NTE2Ni42OTI4MjcsImV4cCI6MjA0NjMyNzk2Ni42NjAwODYsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.bVW_Ykf9tr6gQUUkVV5sqDK_Q_VHwnWA4lWQ3N6UjDT5jXKkoCGWgGekKuGhtf2fNDxY919NYaKR1TRPbXKkyZVoRJa3n02BH5jaHVNbx_WsV1JvRMh1tUXLK3edts_k5hBUnFaioKjO0Y7bLCvl2HXa42gOwKo8p-8PhnzKvpds8_li8nsgvpORsYVAEcughjnGoOeiyKGW10nbaIWSQaRglKu9gic2oj06s07ZEYo0jLykWAHJls_91WY0dS6GGo1qFEcZAq614Zlmaz-7dpw9acHwhLav9x4ldAyTRiTGdTbI8BEFvRIbDp7r2z_T56wTp6IW_D3uhNM5XEMYM0ONnkGmN3TkQmnFm5I6-cFuyWTpfBjh0X2mEHKsbJx_m_ryR6lRdB3OV7m44DVI0NBHjrDVj-ugnnedsaAIAZr6QQVQzwZKDXgiJDk75qjrIH4Ii0BPBd4CNEEewYCf_GWUBr6HhpSDREUBkrJ5PuCCqZSvRRRAQtCV1vuSYvDG";
+    const apiKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI2ZmE4ZDRmMjc5YTg2YjkzOGZmZGI4NDI4ZWI4ZjY2YzE4NjQ5MzRjMzllMzQ2NTQ2MTE2MmQ0YTc0N2Q1NDE0ODE3N2M1MDZhYjcwMmIzZCIsImlhdCI6MTczMDg3NTcyNC4zMTcxMDIsIm5iZiI6MTczMDg3NTcyNC4zMTcxMDUsImV4cCI6MjA0NjQwODUyNC4yNzQ4ODQsInN1YiI6IjMwNDAyMTYiLCJzY29wZXMiOltdfQ.BFgDM79CxYLG2HG7fSsfHrkNBQIxK_ntE1LmEsJmLhADb81UDKLjlrjvOJiySrFquiyTkt24x2sMJ9x5-FL36mivIPW4IWNHyi-E_-SGcWURErAAf5kiJJqZ5x-1xgHFtGBdHw3zZ6vVmSXcNymK5KioVBsP48Ht5oIL_753dczxDk50t1j8KneNjdhm2ZV5Qch_WGE2M1rPwMP4WnY0xs2zNgLml15JaGMf_bhjkikqaQca8-DuA_KS7DwP6WhUoCNwW_sDs8apjMW-4J3FpO-_XR36MwfaoCXa2dVR2tCBw7PkI6nxTAUwIp45Vj4vpbAhfVs5YgN2BePsA3imJmz7NH77OMXf1qm0ZszHT-Xf56VjGOzNWtLoM9QHwgrF1HQtdC1F5w4jhMRKPMwTCX8N4T9uyYtuH4S7z6CIWX-GxDUKcIcc1YusnjDZEAtppf7C1FWLhBUhGr9ONmaHh7I_xMtRLlIO5aTClDZjirwrR15Zl1QWnwAt69wnT4uf";
 
     try {
         const subscriptionsRes = $http.send({
