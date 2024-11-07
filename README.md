@@ -1,6 +1,8 @@
 # PocketBase LemonSqueezy Integration
 
-This is a PocketBase plugin that provides integration with the LemonSqueezy API for handling subscriptions, checkouts, and product synchronization.
+This is a PocketBase plugin that provides integration with the LemonSqueezy API for handling subscriptions, checkouts, and product synchronization. This is a front end agnostic hook that you can use 100% with any SaaS application. If there are any issues please feel free to reach out to me on X - @meinbiz
+
+Also if you want to build a next.js front end for your next app. Consider fastpocket.dev it is the fastest way to build a fully fledged PocketBase app.
 
 ## Features
 
