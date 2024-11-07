@@ -91,3 +91,7 @@ The cron job automatically:
 
 To facilitate testing and integration, a Postman collection is included in the project. You can find it at `./pocketbase-lemonsqueezy.postman_collection.json`. This collection contains pre-configured requests for all available endpoints, allowing you to quickly test the API functionality and understand the request/response flow.
 
+## Video Documentation
+
+If you are struggling - I have setup a [video tutorial](https://www.youtube.com/watch?v=LRQS6PRzvVo) check it out
+
