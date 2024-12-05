@@ -38,12 +38,13 @@
  * By following these steps, you will configure the application to authenticate requests and interact with the LemonSqueezy API using your credentials.
  */
 
-routerAdd("POST", "/lemonsqueezy", (e) => {
+
+routerAdd("POST", "/lemonsqueezy", (c) => {
     const secret = "your_lemonsqueezy_signing_secret_here";
 
-    const info = e.requestInfo();
+    const info = $apis.requestInfo(c)
     const signature = info.headers["x_signature"] || '';
-    const rawBody = readerToString(e.request.body);
+    const rawBody = readerToString(c.request().body)
 
     const hash = $security.hs256(rawBody, secret);
 
@@ -51,7 +52,7 @@ routerAdd("POST", "/lemonsqueezy", (e) => {
     if (!isValid) {
         throw new BadRequestError(`Invalid webhook signature.`);
     }
-    const data = info.body;
+    const data = info.data;
     $app.logger().info("Received data:", "lemonsqueezy", data.meta.event_name, "json", data);
 
     switch (data.meta.event_name) {
@@ -60,7 +61,7 @@ routerAdd("POST", "/lemonsqueezy", (e) => {
         case "subscription_updated":
             try {
                 const subscription = data.data;
-                const existingSubscriptions = $app.findRecordsByFilter(
+                const existingSubscriptions = $app.dao().findRecordsByFilter(
                     "subscription",
                     `subscription_id = "${subscription.id}"`
                 );
@@ -85,12 +86,12 @@ routerAdd("POST", "/lemonsqueezy", (e) => {
                 if (existingSubscriptions.length > 0) {
                     const record = existingSubscriptions[0];
                     record.load(subscriptionData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 } else {
-                    const collection = $app.findCollectionByNameOrId("subscription");
+                    const collection = $app.dao().findCollectionByNameOrId("subscription");
                     const record = new Record(collection);
                     record.load(subscriptionData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 }
             } catch (err) {
                 $app.logger().error("Error processing subscription:", err);
@@ -100,24 +101,27 @@ routerAdd("POST", "/lemonsqueezy", (e) => {
         default:
             break;
     }
-    return e.json(200, { "message": "Data received successfully" });
+    return c.json(200, { "message": "Data received successfully" });
 })
 
-routerAdd("POST", "/create-checkout-session", async (e) => {
+
+routerAdd("POST", "/create-checkout-session", async (c) => {
     const apiKey = "your_api_key_here";
-    const info = e.requestInfo();
+    const info = $apis.requestInfo(c);
     const token = info.headers["authorization"] || '';
     let userRecord;
     try {
-        userRecord = (await $app.findAuthRecordByToken(token, $app.settings().recordAuthToken.secret));
+        userRecord = (await $app.dao().findAuthRecordByToken(token, $app.settings().recordAuthToken.secret));
     } catch (error) {
-        return e.json(400, { "message": "User not authorized" });
+        return c.json(400, { "message": "User not authorized" });
     }
 
-    const existingCustomer = $app.findRecordsByFilter(
+    
+    const existingCustomer = $app.dao().findRecordsByFilter(
         "customer",
         `user_id = "${userRecord.id}"`
     );
+    
 
     let lemonsqueezyCustomerId;
 
@@ -155,14 +159,17 @@ routerAdd("POST", "/create-checkout-session", async (e) => {
         const customerData = customerResponse.json;
         lemonsqueezyCustomerId = customerData.data.id;
 
-        const collection = $app.findCollectionByNameOrId("customer");
+        
+        const collection = $app.dao().findCollectionByNameOrId("customer");
         const newCustomerRecord = new Record(collection);
         newCustomerRecord.load({
             "lemonsqueezy_customer_id": lemonsqueezyCustomerId,
             "user_id": userRecord.id
         });
-        $app.save(newCustomerRecord);
+        $app.dao().saveRecord(newCustomerRecord);
     }
+
+    
 
     const requestBody = {
         "data": {
@@ -184,7 +191,7 @@ routerAdd("POST", "/create-checkout-session", async (e) => {
                 "variant": {
                     "data": {
                         "type": "variants",
-                        "id": info.body.variant_id,
+                        "id": info.data.variant_id,
                     }
                 },
                 "store": {
@@ -210,27 +217,27 @@ routerAdd("POST", "/create-checkout-session", async (e) => {
         });
 
         const responseData = response.json;
-        return e.json(response.status, responseData);
+        return c.json(response.status, responseData);
     } catch (error) {
         $app.logger().error("Error creating checkout:", error);
-        return e.json(400, { "message": "Failed to create checkout" });
+        return c.json(400, { "message": "Failed to create checkout" });
     }
 })
 
-routerAdd("GET", "/create-portal-link", async (e) => {
+routerAdd("GET", "/create-portal-link", async (c) => {
     const apiKey = "your_api_key_here"; // Provided API key
-    const info = e.requestInfo();
+    const info = $apis.requestInfo(c);
     const token = info.headers["authorization"] || '';
     let userRecord;
     try {
-        userRecord = await $app.findAuthRecordByToken(token, $app.settings().recordAuthToken.secret);
-        const customerRecord = await $app.findFirstRecordByFilter(
+        userRecord = await $app.dao().findAuthRecordByToken(token, $app.settings().recordAuthToken.secret);
+        const customerRecord = await $app.dao().findFirstRecordByFilter(
             "customer",
             `user_id = "${userRecord.id}"`
         );
 
         if (!customerRecord) {
-            return e.json(404, { "message": "Customer not found" });
+            return c.json(404, { "message": "Customer not found" });
         }
         
         const response = await $http.send({
@@ -246,10 +253,10 @@ routerAdd("GET", "/create-portal-link", async (e) => {
         const responseData = response.json;
         const customerPortalLink = responseData.data.attributes.urls.customer_portal;
 
-        return e.json(response.status, { "customer_portal_link": customerPortalLink });
+        return c.json(response.status, { "customer_portal_link": customerPortalLink });
     } catch (error) {
         $app.logger().error("Error retrieving customer portal link:", error);
-        return e.json(400, { "message": "Failed to retrieve customer portal link" });
+        return c.json(400, { "message": "Failed to retrieve customer portal link" });
     }
 })
 
@@ -258,6 +265,7 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 //     const apiKey = "your_api_key_here";
 
 //     try {
+//         // Fetch subscriptions
 //         const subscriptionsRes = $http.send({
 //             url: "https://api.lemonsqueezy.com/v1/subscriptions",
 //             method: "GET",
@@ -273,7 +281,7 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 
 //         subscriptionsData.data.forEach(subscription => {
 //             try {
-//                 const existingSubscriptions = $app.findRecordsByFilter(
+//                 const existingSubscriptions = $app.dao().findRecordsByFilter(
 //                     "subscription",
 //                     `subscription_id = "${subscription.id}"`
 //                 );
@@ -296,14 +304,16 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 //                 };
 
 //                 if (existingSubscriptions.length > 0) {
+//                     // Update existing record
 //                     const record = existingSubscriptions[0];
 //                     record.load(subscriptionData);
-//                     $app.save(record);
+//                     $app.dao().saveRecord(record);
 //                 } else {
-//                     const collection = $app.findCollectionByNameOrId("subscription");
+//                     // Create new record
+//                     const collection = $app.dao().findCollectionByNameOrId("subscription");
 //                     const record = new Record(collection);
 //                     record.load(subscriptionData);
-//                     $app.save(record);
+//                     $app.dao().saveRecord(record);
 //                 }
 //             } catch (err) {
 //                 $app.logger().error("Error processing subscription:", err);
@@ -324,9 +334,10 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 
 //         const variantsData = variantsRes.json;
 
+//         // Process variants
 //         variantsData.data.forEach(variant => {
 //             try {
-//                 const existingVariants = $app.findRecordsByFilter(
+//                 const existingVariants = $app.dao().findRecordsByFilter(
 //                     "variant",
 //                     `variant_id = "${variant.id}"`
 //                 );
@@ -348,12 +359,12 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 //                 if (existingVariants.length > 0) {
 //                     const record = existingVariants[0];
 //                     record.load(variantData);
-//                     $app.save(record);
+//                     $app.dao().saveRecord(record);
 //                 } else {
-//                     const collection = $app.findCollectionByNameOrId("variant");
+//                     const collection = $app.dao().findCollectionByNameOrId("variant");
 //                     const record = new Record(collection);
 //                     record.load(variantData);
-//                     $app.save(record);
+//                     $app.dao().saveRecord(record);
 //                 }
 //             } catch (err) {
 //                 $app.logger().error("Error processing variant:", err);
@@ -376,7 +387,7 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 
 //         productsData.data.forEach(product => {
 //             try {
-//                 const existingProducts = $app.findRecordsByFilter(
+//                 const existingProducts = $app.dao().findRecordsByFilter(
 //                     "product",
 //                     `product_id = "${product.id}"`
 //                 );
@@ -393,12 +404,12 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 //                 if (existingProducts.length > 0) {
 //                     const record = existingProducts[0];
 //                     record.load(productData);
-//                     $app.save(record);
+//                     $app.dao().saveRecord(record);
 //                 } else {
-//                     const collection = $app.findCollectionByNameOrId("product");
+//                     const collection = $app.dao().findCollectionByNameOrId("product");
 //                     const record = new Record(collection);
 //                     record.load(productData);
-//                     $app.save(record);
+//                     $app.dao().saveRecord(record);
 //                 }
 //             } catch (err) {
 //                 $app.logger().error("Error processing product:", err);
@@ -407,14 +418,14 @@ routerAdd("GET", "/create-portal-link", async (e) => {
 //         });
 
 //         $app.logger().info("Ran sync", "lemonsqueezy", "success");
-//         return e.json(200, { "message": "success" });
+//         return c.json(200, { "message": "success" });
 //     } catch (error) {
 //         $app.logger().error("Error during synchronization:", error);
-//         return e.json(400, { "message": error });
+//         return c.json(400, { "message": error });
 //     }
 // });
 
-routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
+routerAdd("GET","/manual-lemonsqueezy-synchronization", async (c) => {
     const apiKey = "your_api_key_here";
 
     try {
@@ -433,7 +444,7 @@ routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
 
         subscriptionsData.data.forEach(subscription => {
             try {
-                const existingSubscriptions = $app.findRecordsByFilter(
+                const existingSubscriptions = $app.dao().findRecordsByFilter(
                     "subscription",
                     `subscription_id = "${subscription.id}"`
                 );
@@ -458,12 +469,12 @@ routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
                 if (existingSubscriptions.length > 0) {
                     const record = existingSubscriptions[0];
                     record.load(subscriptionData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 } else {
-                    const collection = $app.findCollectionByNameOrId("subscription");
+                    const collection = $app.dao().findCollectionByNameOrId("subscription");
                     const record = new Record(collection);
                     record.load(subscriptionData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 }
             } catch (err) {
                 $app.logger().error("Error processing subscription:", err);
@@ -486,7 +497,7 @@ routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
 
         variantsData.data.forEach(variant => {
             try {
-                const existingVariants = $app.findRecordsByFilter(
+                const existingVariants = $app.dao().findRecordsByFilter(
                     "variant",
                     `variant_id = "${variant.id}"`
                 );
@@ -508,12 +519,12 @@ routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
                 if (existingVariants.length > 0) {
                     const record = existingVariants[0];
                     record.load(variantData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 } else {
-                    const collection = $app.findCollectionByNameOrId("variant");
+                    const collection = $app.dao().findCollectionByNameOrId("variant");
                     const record = new Record(collection);
                     record.load(variantData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 }
             } catch (err) {
                 $app.logger().error("Error processing variant:", err);
@@ -536,7 +547,7 @@ routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
 
         productsData.data.forEach(product => {
             try {
-                const existingProducts = $app.findRecordsByFilter(
+                const existingProducts = $app.dao().findRecordsByFilter(
                     "product",
                     `product_id = "${product.id}"`
                 );
@@ -553,12 +564,12 @@ routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
                 if (existingProducts.length > 0) {
                     const record = existingProducts[0];
                     record.load(productData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 } else {
-                    const collection = $app.findCollectionByNameOrId("product");
+                    const collection = $app.dao().findCollectionByNameOrId("product");
                     const record = new Record(collection);
                     record.load(productData);
-                    $app.save(record);
+                    $app.dao().saveRecord(record);
                 }
             } catch (err) {
                 $app.logger().error("Error processing product:", err);
@@ -567,9 +578,9 @@ routerAdd("GET","/manual-lemonsqueezy-synchronization", async (e) => {
         });
 
         $app.logger().info("Ran sync", "lemonsqueezy", "success");
-        return e.json(200, { "message": "success" });
+        return c.json(200, { "message": "success" });
     } catch (error) {
         $app.logger().error("Error during synchronization:", error);
-        return e.json(400, { "message": error });
+        return c.json(400, { "message": error });
     }
 })

@@ -25,6 +25,8 @@ Before using this code, ensure you have:
    - product
    - variant
 
+**Note:** If you are using a version of PocketBase earlier than 23, you need to use the `-legacy` files for compatibility.
+
 ## Setup
 
 ### 1. PocketBase Configuration
@@ -94,4 +96,3 @@ To facilitate testing and integration, a Postman collection is included in the p
 ## Video Documentation
 
 If you are struggling - I have setup a [video tutorial](https://www.youtube.com/watch?v=LRQS6PRzvVo) check it out
-
