@@ -96,3 +96,7 @@ To facilitate testing and integration, a Postman collection is included in the p
 ## Video Documentation
 
 If you are struggling - I have setup a [video tutorial](https://www.youtube.com/watch?v=LRQS6PRzvVo) check it out
+
+## Sponsors
+
+- [Biz365](https://www.biz365.com.au/)
